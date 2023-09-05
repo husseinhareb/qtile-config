@@ -41,4 +41,12 @@ symbol_index = (int(current_brightness-1) // 25)
 label = tb.Label(root, text=f"{symbols[symbol_index]}", font=("Symbols Nerd Font", 10))
 label.pack()
 
+my_scale.bind("<Motion>", scale_changed)
+
+def on_focus_out(event):
+    root.quit()
+
+
+root.bind("<FocusOut>", on_focus_out)
+
 root.mainloop()
