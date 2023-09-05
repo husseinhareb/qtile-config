@@ -18,3 +18,27 @@ my_scale = tb.Scale(root, bootstyle="info",
                     )
 my_scale.pack(pady=10)
 my_scale.set(current_brightness)
+
+
+
+def set_brightness(value):
+    try:
+        subprocess.run(['brightnessctl', 'set', str(value) + '%'], check=True)
+    except subprocess.CalledProcessError:
+        print("Error setting brightness")
+
+def update_label(value):
+    symbol_index = int(value) // 25 
+    label.config(text=f"{symbols[symbol_index]}")
+
+def scale_changed(event):
+    brightness_value = my_scale.get()
+    set_brightness(brightness_value)
+    update_label(brightness_value)
+
+
+symbol_index = (int(current_brightness-1) // 25)  
+label = tb.Label(root, text=f"{symbols[symbol_index]}", font=("Symbols Nerd Font", 10))
+label.pack()
+
+root.mainloop()
