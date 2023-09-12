@@ -18,3 +18,20 @@ volume_info = completed_process.stdout.strip()
 
 volume_info = volume_info.replace('%','')
 current_volume = int(volume_info)
+
+my_scale = tb.Scale(root, bootstyle="info",
+                    length=160,
+                    orient="vertical",
+                    from_=120,
+                    to=0,
+                    )
+my_scale.pack(pady=10)
+my_scale.set(int(current_volume))        
+def set_volume(volume):
+    subprocess.run(["pactl", "set-sink-volume", "@DEFAULT_SINK@", f"{volume}%"])
+def update_label(value):    
+    symbol_index = int(value) //  40
+    if int(value) == 0:
+        label.config(text="󰖁")
+    else:
+        label.config(text=f"{symbols[symbol_index]}")
