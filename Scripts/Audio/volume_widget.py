@@ -53,3 +53,10 @@ else:
 
 my_scale.bind("<Motion>", scale_changed)
 
+
+def on_focus_out(event):
+    root.quit()
+root.bind("<FocusOut>", on_focus_out)
+
+
+root.mainloop()
