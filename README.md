@@ -1,2 +1,1 @@
 # qtile-config
-erre
