@@ -9,6 +9,7 @@ root.geometry('40x210+1650+38')
 root.configure(bg="#222222")
 theme = tb.Style("darkly")
 
+
 bash_command = "pactl list sources | grep 'Volume:' | awk -F/ '{print $2}' | awk '{print $1}' | head -n 3 | tail -n 1"
 
 completed_process = subprocess.run(bash_command, shell=True, capture_output=True, text=True)
@@ -24,3 +25,13 @@ my_scale = tb.Scale(root, bootstyle="info",
                     from_=100,
                     to=0,
                     )
+my_scale.pack(pady=10)
+my_scale.set(int(current_volume))        
+def set_volume(volume):
+    subprocess.run(["pactl", "set-source-volume", "0", f"{volume}%"])
+def update_label(value):    
+    if int(value) == 0:
+        label.config(text="")
+    else:
+        label.config(text="")
+
