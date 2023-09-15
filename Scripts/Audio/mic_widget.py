@@ -35,3 +35,14 @@ def update_label(value):
     else:
         label.config(text="")
 
+def scale_changed(event):
+    volume_value = my_scale.get()
+    set_volume(volume_value)
+    update_label(volume_value)
+
+if current_volume == 0:
+    label = tb.Label(root, text="", font=("Symbols Nerd Font", 10))
+    label.pack()
+else:
+    label = tb.Label(root, text="", font=("Symbols Nerd Font", 10))
+    label.pack()
