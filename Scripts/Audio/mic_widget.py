@@ -46,3 +46,13 @@ if current_volume == 0:
 else:
     label = tb.Label(root, text="", font=("Symbols Nerd Font", 10))
     label.pack()
+
+my_scale.bind("<Motion>", scale_changed)
+
+def on_focus_out(event):
+    root.quit()
+root.bind("<FocusOut>", on_focus_out)
+
+
+
+root.mainloop()
