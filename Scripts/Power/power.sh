@@ -7,5 +7,7 @@ rofi_command="rofi -theme $dir/power.rasi"
 # Options
 terminal=""
 shutdown="󰐥"
-
+reboot="󰜉"
+suspend="󰒲"
+lock=""
 logout=""
