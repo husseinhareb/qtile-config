@@ -42,23 +42,21 @@ def set_max_frequency(frequency_kHz):
 
 def toggle_cpu_boost():
     def set_cpu_mode():
-        password = password_var.get()  # Use password_var instead of password_entry.get()
-        password_window.destroy()  # Close the password entry window
+        password = password_var.get() 
+        password_window.destroy() 
 
         if boost_var.get():
-            # Set CPU performance mode when checkbox is checked
-            command = f"echo {password} | sudo -S cpupower frequency-set --max 5000000"
+            cpu_boost = get_max_cpu_speed()
+            command = f"echo {password} | sudo -S cpupower frequency-set --max {cpu_boost}"
         else:
-            # Set CPU powersave mode when checkbox is unchecked
-            command = f"echo {password} | sudo -S cpupower frequency-set --max 2600000"
+            cpu_base = get_base_cpu_speed()
+            command = f"echo {password} | sudo -S cpupower frequency-set --max {cpu_base}"
 
         try:
             subprocess.run(["bash", "-c", command], check=True)
-            # Save the checkbox state to a file
             with open('checkbox_state.txt', 'w') as file:
                 file.write(str(boost_var.get()))
         except subprocess.CalledProcessError:
-            #error_label.config(text="Incorrect password, please try again")
             open_password_window()
 
     def open_password_window():
