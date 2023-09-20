@@ -1,3 +1,5 @@
+import subprocess
+import psutil
 def get_cpu_temp():
     output = subprocess.check_output(["sensors"], text=True)
     for line in output.splitlines():
