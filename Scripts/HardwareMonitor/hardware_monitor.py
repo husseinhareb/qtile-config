@@ -18,3 +18,7 @@ def get_cpu_speed():
     return average_speed_ghz;
 
 def get_max_cpu_speed():
+    output = subprocess.check_output("lscpu | grep 'CPU max MHz'", shell=True)
+    max_cpu_speed_mhz = float(output.split(b':')[1].strip())
+    max_cpu_speed_ghz = max_cpu_speed_mhz / 1000.0
+    return max_cpu_speed_ghz;
