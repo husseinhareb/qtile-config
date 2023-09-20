@@ -65,7 +65,9 @@ def toggle_cpu_boost():
 
         password_label = tk.Label(password_window, text="Enter your password:")
         password_label.pack()
-
+        password_warning_label = tk.Label(password_window,
+                                          text="BE CAREFUL YOU ARE CHANGING THE CPU SPEED,ME THE CREATOR HOLD NO RESPONBILITY FOR THE HEALTH OF YOUR CPU")
+    
         global password_var  
         password_var = tk.StringVar()
         password_entry = tk.Entry(password_window, show="*", textvariable=password_var)
@@ -182,6 +184,7 @@ def update_labels():
     gpu_speed.configure(amountused=get_gpu_clock())
     get_battery_capacity_label.configure(value=get_battery_capacity())
     battery_label["text"] = str(get_battery_capacity()) + "%"
+
     if int(get_ram_consumption()) > 1000:
         get_ram_consumption_label.configure(value=int(get_ram_consumption()))
         ram_cons = int(get_ram_consumption())/1024
@@ -191,6 +194,7 @@ def update_labels():
     else:
         get_ram_consumption_label.configure(value=get_ram_consumption())
         ram_label["text"] = str(get_ram_consumption()) + "MB"
+
     get_vram_consumption_label.configure(value=get_vram_consumption())
     gpu_memory_label["text"] = str(get_vram_consumption()) + "MB"
     gpu_wattage_label["text"] = str(get_gpu_wattage())+ "W"
@@ -274,7 +278,7 @@ cpu_boost_button = tb.Checkbutton(  cpu_frame,
                                     offvalue=0,
                                     command=toggle_cpu_boost)
 cpu_boost_button.pack(padx=200,pady=80)
-cpu_boost_button.place(x=340,y=161)
+cpu_boost_button.place(x=360,y=155)
 
 
 get_ram_consumption_label= tb.Progressbar(cpu_frame,
