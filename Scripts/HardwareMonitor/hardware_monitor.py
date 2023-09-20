@@ -40,31 +40,48 @@ def set_max_frequency(frequency_kHz):
     command = f"sudo cpupower frequency-set --max {frequency_kHz}"
     subprocess.call(command, shell=True)
 
-def open_password_window():
-    password_window = tk.Toplevel(root)
-    password_window.title("Enter Password")
+def toggle_cpu_boost():
+    def set_cpu_mode():
+        password = password_var.get()  # Use password_var instead of password_entry.get()
+        password_window.destroy()  # Close the password entry window
 
-    password_label = tk.Label(password_window, text="Enter your password:")
-    password_label.pack()
+        if boost_var.get():
+            # Set CPU performance mode when checkbox is checked
+            command = f"echo {password} | sudo -S cpupower frequency-set --max 5000000"
+        else:
+            # Set CPU powersave mode when checkbox is unchecked
+            command = f"echo {password} | sudo -S cpupower frequency-set --max 2600000"
 
-    password_entry = tk.Entry(password_window, show="*")
-    password_entry.pack()
-
-    def run_command_with_sudo():
-        password = password_entry.get()
         try:
-            base_speed = get_base_cpu_speed() * 1000000
-            command = f"echo '{password}' | sudo cpupower frequency-set --max 2600000"
-            subprocess.Popen(command, shell=True)
-        except Exception as e:
-           turbo_speed = get_max_cpu_speed() * 1000000
-           command = f"echo '{password}' | sudo cpupower frequency-set --max 3000000"
-           subprocess.Popen(command, shell=True)
+            subprocess.run(["bash", "-c", command], check=True)
+            # Save the checkbox state to a file
+            with open('checkbox_state.txt', 'w') as file:
+                file.write(str(boost_var.get()))
+        except subprocess.CalledProcessError:
+            #error_label.config(text="Incorrect password, please try again")
+            open_password_window()
 
-        password_window.destroy()
+    def open_password_window():
+        global password_window  # Declare password_window as global
+        password_window = tk.Toplevel(root)
+        password_window.title("Enter Password")
 
-    run_button = tk.Button(password_window, text="Run Command", command=run_command_with_sudo)
-    run_button.pack() 
+        password_label = tk.Label(password_window, text="Enter your password:")
+        password_label.pack()
+
+        global password_var  # Declare password_var as global
+        password_var = tk.StringVar()  # Create a StringVar to hold the password
+        password_entry = tk.Entry(password_window, show="*", textvariable=password_var)
+        password_entry.pack()
+
+        submit_button = tk.Button(password_window, text="Submit", command=set_cpu_mode)
+        submit_button.pack()
+
+        error_label = tk.Label(password_window, text="", fg="red")
+        error_label.pack()
+
+    open_password_window()
+
 
 def get_gpu_temp():
     try:
@@ -242,17 +259,16 @@ cpu_speed = tb.Meter(cpu_frame,
                                 subtextfont=("Jetbrains Nerd Font",4))
 cpu_speed.pack()
 cpu_speed.place(x=205,y=28)
-check_var = tk.BooleanVar()
-check_var.set(False)
-  
+boost_var = tk.BooleanVar()
+
 cpu_boost_button = tb.Checkbutton(  cpu_frame,
                                     bootstyle= "primary",
-                                    variable=check_var,
+                                    variable=boost_var,
                                     style='Roundtoggle.Toolbutton',
                                     onvalue=1,
                                     text="󰓅 Cpu boost",
                                     offvalue=0,
-                                    command=open_password_window)
+                                    command=toggle_cpu_boost)
 cpu_boost_button.pack(padx=200,pady=80)
 cpu_boost_button.place(x=340,y=161)
 
@@ -416,7 +432,7 @@ gpu_wattage_label = tb.Label(gpu_frame,
                  font=("Jetbrains Nerd Font",6,"bold"),
                 )
 gpu_wattage_label.pack(padx=150,pady=80)
-gpu_wattage_label.place(x=482,y=5)
+gpu_wattage_label.place(x=485,y=5)
 
 gpu_wattage_icon_label = tb.Label(gpu_frame,
                  bootstyle='success',
