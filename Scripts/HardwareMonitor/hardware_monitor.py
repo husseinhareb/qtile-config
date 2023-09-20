@@ -29,3 +29,400 @@ def get_max_cpu_speed():
     max_cpu_speed_mhz = float(output.split(b':')[1].strip())
     max_cpu_speed_ghz = max_cpu_speed_mhz / 1000.0
     return max_cpu_speed_ghz;
+
+def get_base_cpu_speed():
+    command = "lscpu | awk -F ': ' '/Model name/ {split($2,a,\"@\"); gsub(/GHz/,\"\",a[2]); print a[2]}'"
+    output = subprocess.check_output(command, shell=True, encoding='utf-8').strip()
+    return output
+
+
+def set_max_frequency(frequency_kHz):
+    command = f"sudo cpupower frequency-set --max {frequency_kHz}"
+    subprocess.call(command, shell=True)
+
+def open_password_window():
+    password_window = tk.Toplevel(root)
+    password_window.title("Enter Password")
+
+    password_label = tk.Label(password_window, text="Enter your password:")
+    password_label.pack()
+
+    password_entry = tk.Entry(password_window, show="*")
+    password_entry.pack()
+
+    def run_command_with_sudo():
+        password = password_entry.get()
+        try:
+            base_speed = get_base_cpu_speed() * 1000000
+            command = f"echo '{password}' | sudo cpupower frequency-set --max 2600000"
+            subprocess.Popen(command, shell=True)
+        except Exception as e:
+           turbo_speed = get_max_cpu_speed() * 1000000
+           command = f"echo '{password}' | sudo cpupower frequency-set --max 3000000"
+           subprocess.Popen(command, shell=True)
+
+        password_window.destroy()
+
+    run_button = tk.Button(password_window, text="Run Command", command=run_command_with_sudo)
+    run_button.pack() 
+
+def get_gpu_temp():
+    try:
+        command = ["nvidia-smi", "--query-gpu=temperature.gpu", "--format=csv,noheader,nounits"]
+        output = subprocess.check_output(command, text=True)
+        return output.strip()
+    except subprocess.CalledProcessError:
+        return "N/A"
+
+def get_max_gpu_clock():
+    try:
+        command = ["nvidia-smi", "--query-gpu=clocks.max.graphics", "--format=csv,noheader,nounits"]
+        output = subprocess.check_output(command, text=True)
+        return output.strip()
+    except subprocess.CalledProcessError:
+        return "N/A"
+
+def get_gpu_utilization():
+    try:
+        command = ["nvidia-smi", "--query-gpu=utilization.gpu", "--format=csv,noheader,nounits"]
+        output = subprocess.check_output(command, text=True)
+        return output.strip()
+    except subprocess.CalledProcessError:
+        return "N/A"
+
+def get_gpu_clock():
+    try:
+        command = ["nvidia-smi", "--query-gpu=clocks.current.graphics", "--format=csv,noheader,nounits"]
+        output = subprocess.check_output(command, text=True)
+        return output.strip()
+    except subprocess.CalledProcessError:
+        return "N/A"
+
+def get_ram_consumption():
+    command = "free -m | awk '/Mem:/ {print int($3)}'"
+    output = subprocess.check_output(command, shell=True, encoding='utf-8').strip()
+    return output
+def get_max_ram():
+    try:
+        virtual_memory = psutil.virtual_memory()
+        return int(virtual_memory.total /(1024*1024))
+    except Exception as e:
+        return f"Error: {e}"
+    
+
+def get_battery_capacity():
+    try:
+        with open('/sys/class/power_supply/BAT0/capacity', 'r') as file:
+            capacity = file.read().strip()
+            return int(capacity)
+    except FileNotFoundError:
+        return None
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return None
+
+def get_vram_consumption():
+    try:
+        output = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.used', '--format=csv,noheader,nounits'])
+        vram_usage = output.decode().strip()
+        return int(vram_usage)
+    except FileNotFoundError:
+        return None
+
+
+def get_max_vram():
+    try:
+        output = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.total', '--format=csv,noheader,nounits'])
+        max_vram = output.decode().strip()
+        return int(max_vram) 
+    except FileNotFoundError:
+        return None
+
+def get_gpu_wattage():
+    try:
+        output = subprocess.check_output(['nvidia-smi', '--query-gpu=power.draw', '--format=csv,noheader,nounits'])
+        output_str = output.decode('utf-8').strip()
+        wattage = float(output_str)
+        return wattage
+    except Exception as e:
+        return None
+
+
+def get_max_gpu_wattage():
+    try:
+        output = subprocess.check_output(['nvidia-smi', '--query-gpu=power.max_limit', '--format=csv,noheader,nounits', '-i', '0'])
+        output_str = output.decode('utf-8').strip()
+        wattage_values = [float(val) for val in output_str.split('\n')]
+        max_wattage = max(wattage_values)
+        return max_wattage
+    except Exception as e:
+        return None
+
+
+def update_labels():
+    cpu_temp_label.configure(amountused=get_cpu_temp())
+    cpu_utilization_label.configure(amountused=get_cpu_utilization())
+    cpu_speed.configure(amountused=get_cpu_speed())
+    gpu_temp_label.configure(amountused=get_gpu_temp())
+    gpu_utilization.configure(amountused=get_gpu_utilization())
+    gpu_speed.configure(amountused=get_gpu_clock())
+    get_battery_capacity_label.configure(value=get_battery_capacity())
+    battery_label["text"] = str(get_battery_capacity()) + "%"
+    if int(get_ram_consumption()) > 1000:
+        get_ram_consumption_label.configure(value=int(get_ram_consumption()))
+        ram_cons = int(get_ram_consumption())/1024
+        ram_cons = "{:.1f}".format(ram_cons)
+        ram_label["text"] = str(ram_cons) + "GB"
+
+    else:
+        get_ram_consumption_label.configure(value=get_ram_consumption())
+        ram_label["text"] = str(get_ram_consumption()) + "MB"
+    get_vram_consumption_label.configure(value=get_vram_consumption())
+    gpu_memory_label["text"] = str(get_vram_consumption()) + "MB"
+    gpu_wattage_label["text"] = str(get_gpu_wattage())+ "W"
+    get_gpu_wattage_bar.configure(value=get_gpu_wattage())
+    root.after(1000, update_labels)  # Call update_labels every 1000ms (1 second)
+
+
+
+root = tk.Tk(className="monitoring_widget")
+theme = tb.Style("darkly")
+root.configure(bg="#3b3b3b")
+root.geometry('550x400+1725+38')
+
+cpu_frame = tb.Frame(root,width=530,height=190)
+cpu_frame.pack(pady=5)
+cpu_temp_label = tb.Meter(cpu_frame,
+                                bootstyle="danger",
+                                arcrange=200,
+                                arcoffset=170,
+                                amountused=0,
+                                amounttotal=100,
+                                metertype='semi',
+                                metersize=80,
+                                #stripethickness=3,
+                                meterthickness=5,
+                                showtext= True,
+                                textright="°C",
+                                textfont=("Jetbrains Nerd Font",14),
+                                subtext="Cpu Temp",
+                                stepsize=1,
+                                subtextfont=("Jetbrains Nerd Font",4))
+cpu_temp_label.pack()
+cpu_temp_label.place(x=347,y=33)
+cpu_utilization_label = tb.Meter(cpu_frame,
+                                bootstyle="info",
+                                amountused=0,
+                                amounttotal=100,
+                                metertype='semi',
+                                metersize=80,
+                                stripethickness=3,
+                                meterthickness=5,
+                                showtext= True,
+                                textright="%",
+                                textfont=("Jetbrains Nerd Font",14),
+                                subtext="Cpu Usage",
+                                stepsize=1,
+                                subtextfont=("Jetbrains Nerd Font",4))
+cpu_utilization_label.pack()
+cpu_utilization_label.place(x=70,y=30)
+
+cpu_speed = tb.Meter(cpu_frame,
+                                bootstyle="Success",
+                                amountused=0,
+                                amounttotal=get_max_cpu_speed(),
+                                metertype='full',
+                                metersize=85,
+                                meterthickness=5,
+                                showtext= True,
+                                textright="Ghz",
+                                textfont=("Jetbrains Nerd Font",14),
+                                subtext="Cpu Speed",
+                                stepsize=1,
+                                subtextfont=("Jetbrains Nerd Font",4))
+cpu_speed.pack()
+cpu_speed.place(x=205,y=28)
+check_var = tk.BooleanVar()
+check_var.set(False)
+  
+cpu_boost_button = tb.Checkbutton(  cpu_frame,
+                                    bootstyle= "primary",
+                                    variable=check_var,
+                                    style='Roundtoggle.Toolbutton',
+                                    onvalue=1,
+                                    text="󰓅 Cpu boost",
+                                    offvalue=0,
+                                    command=open_password_window)
+cpu_boost_button.pack(padx=200,pady=80)
+cpu_boost_button.place(x=340,y=161)
+
+
+get_ram_consumption_label= tb.Progressbar(cpu_frame,
+                                     maximum=get_max_ram(),
+                                     length= 130,
+                                     orient="vertical",
+                                     style='info.TProgressbar'
+                                     )
+get_ram_consumption_label.pack(padx= 0,pady=0)
+get_ram_consumption_label.place(x=20,y=21)
+
+get_ram_consumption_label.start()
+get_ram_consumption_label.stop()
+
+
+get_battery_capacity_label= tb.Progressbar(cpu_frame,
+                                     maximum=100,
+                                     length= 130,
+                                     orient='vertical',
+                                     style='danger.TProgressbar'
+                                     )
+get_battery_capacity_label.pack(padx= 0,pady=0)
+get_battery_capacity_label.place(x=494,y=20)
+
+get_battery_capacity_label.start()
+get_battery_capacity_label.stop()
+
+
+label = tb.Label(cpu_frame,
+                 bootstyle='success',
+                 text="󰍛",
+                 font=("Jetbrains Nerd Font",10))
+label.pack(padx=200,pady=80)
+label.place(x=20,y=157)
+
+label = tb.Label(cpu_frame,
+                 bootstyle='success',
+                 text="󱊢",
+                 font=("Jetbrains Nerd Font",8))
+label.pack(padx=200,pady=80)
+label.place(x=495,y=157)
+
+
+ram_label = tb.Label(cpu_frame,
+                 foreground="#3498db",
+                 font=("Jetbrains Nerd Font",6,"bold"),
+                 )
+ram_label.pack(padx=150,pady=80)
+ram_label.place(x=10,y=5)
+
+battery_label = tb.Label(cpu_frame,
+                 foreground="#e74c3c",
+                 font=("Jetbrains Nerd Font",6,"bold"),
+                )
+battery_label.pack(padx=150,pady=80)
+battery_label.place(x=490,y=5)
+
+
+gpu_frame = tb.Frame(root,width=530,height=190,)
+gpu_frame.pack(pady=5)
+
+
+gpu_temp_label = tb.Meter(gpu_frame,
+                                bootstyle="danger",
+                                arcrange=200,
+                                arcoffset=170,
+                                amountused=0,
+                                amounttotal=100,
+                                metertype='semi',
+                                metersize=85,
+                                #stripethickness=3,
+                                meterthickness=5,
+                                showtext= True,
+                                textright="°C",
+                                textfont=("Jetbrains Nerd Font",14),
+                                subtext="Gpu Temp",
+                                stepsize=1,
+                                subtextfont=("Jetbrains Nerd Font",4))
+gpu_temp_label.pack()
+gpu_temp_label.place(x=347,y=33)
+
+
+gpu_speed = tb.Meter(gpu_frame,
+                                bootstyle="Success",
+                                amountused=0,
+                                amounttotal=get_max_gpu_clock(),
+                                metertype='full',
+                                metersize=85,
+                                meterthickness=5,
+                                showtext= True,
+                                textright="Mhz",
+                                textfont=("Jetbrains Nerd Font",14),
+                                subtext="Gpu Speed",
+                                stepsize=1,
+                                subtextfont=("Jetbrains Nerd Font",4))
+gpu_speed.pack()
+gpu_speed.place(x=205,y=28)
+
+gpu_utilization = tb.Meter(gpu_frame,
+                                bootstyle="info",
+                                amountused=0,
+                                amounttotal=100,
+                                metertype='semi',
+                                metersize=85,
+                                stripethickness=3,
+                                meterthickness=5,
+                                showtext= True,
+                                textright="%",
+                                textfont=("Jetbrains Nerd Font",14),
+                                subtext="Gpu Usage",
+                                stepsize=1,
+                                subtextfont=("Jetbrains Nerd Font",4))
+gpu_utilization.pack()
+gpu_utilization.place(x=70,y=30)
+
+
+get_vram_consumption_label= tb.Progressbar(gpu_frame,
+                                     maximum=get_max_vram(),
+                                     length= 130,
+                                     orient="vertical",
+                                     style='info.TProgressbar'
+                                     )
+get_vram_consumption_label.pack(padx= 0,pady=0)
+get_vram_consumption_label.place(x=20,y=21)
+
+get_vram_consumption_label.start()
+get_vram_consumption_label.stop()
+
+
+gpu_memory_label = tb.Label(gpu_frame,
+                            foreground="#3498db",
+                            font=("Jetbrains Nerd Font",6,"bold"))
+gpu_memory_label.pack(padx=200,pady=80)
+gpu_memory_label.place(x=10,y=5)
+
+
+gpu_memory_label_icon = tb.Label(gpu_frame,
+                 bootstyle='success',
+                 text="󰍛",
+                 font=("Jetbrains Nerd Font",8))
+gpu_memory_label_icon.pack(padx=200,pady=80)
+gpu_memory_label_icon.place(x=20,y=157)
+
+
+get_gpu_wattage_bar= tb.Progressbar(gpu_frame,
+                                     maximum= get_max_gpu_wattage(),
+                                     length= 130,
+                                     orient="vertical",
+                                     style='danger.TProgressbar'
+                                     )
+get_gpu_wattage_bar.pack(padx= 0,pady=0)
+get_gpu_wattage_bar.place(x=494,y=20)
+
+get_gpu_wattage_bar.start()
+get_gpu_wattage_bar.stop()
+
+gpu_wattage_label = tb.Label(gpu_frame,
+                 foreground="#e74c3c",
+                 font=("Jetbrains Nerd Font",6,"bold"),
+                )
+gpu_wattage_label.pack(padx=150,pady=80)
+gpu_wattage_label.place(x=485,y=5)
+
+gpu_wattage_icon_label = tb.Label(gpu_frame,
+                 bootstyle='success',
+                 text="󱐋",
+                 font=("Jetbrains Nerd Font",8))
+gpu_wattage_icon_label.pack(padx=200,pady=80)
+gpu_wattage_icon_label.place(x=495,y=157)
+update_labels()
+root.mainloop()
