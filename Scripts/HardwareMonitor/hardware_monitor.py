@@ -416,7 +416,7 @@ gpu_wattage_label = tb.Label(gpu_frame,
                  font=("Jetbrains Nerd Font",6,"bold"),
                 )
 gpu_wattage_label.pack(padx=150,pady=80)
-gpu_wattage_label.place(x=485,y=5)
+gpu_wattage_label.place(x=482,y=5)
 
 gpu_wattage_icon_label = tb.Label(gpu_frame,
                  bootstyle='success',
