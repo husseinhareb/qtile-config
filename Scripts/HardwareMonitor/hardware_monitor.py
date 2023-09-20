@@ -61,13 +61,21 @@ def toggle_cpu_boost():
     def open_password_window():
         global password_window 
         password_window = tk.Toplevel(root)
-        password_window.title("Enter Password")
-
-        password_label = tk.Label(password_window, text="Enter your password:")
-        password_label.pack()
+        password_window.geometry('1080x140+1000+500')
+        password_window.title("Password_Entry")
         password_warning_label = tk.Label(password_window,
-                                          text="BE CAREFUL YOU ARE CHANGING THE CPU SPEED,ME THE CREATOR HOLD NO RESPONBILITY FOR THE HEALTH OF YOUR CPU")
-    
+                                          text="  DISCLAIMER",
+                                          font=("Jetbrains Nerd Font",10,"bold"))
+        password_warning_label.place() 
+        password_warning_label.pack()
+        responsibility_label = tk.Label(password_window,
+                                        text="This Option tweaks the hardware of your computer.\nMe,(The creator) explicitly disclaims any responsibility or liability for any consequences arising from its use.\n By choosing to use this option, You (The user) acknowledge and accept that the creator bears no responsibility for any direct, indirect, or consequential damages resulting from its use.")
+        responsibility_label.pack()
+        password_label = tk.Label(password_window, text="Enter your CORRECT SUDO password:")
+        password_label.pack()
+
+
+                                    
         global password_var  
         password_var = tk.StringVar()
         password_entry = tk.Entry(password_window, show="*", textvariable=password_var)
