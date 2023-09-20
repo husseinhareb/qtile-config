@@ -46,11 +46,10 @@ def toggle_cpu_boost():
         password_window.destroy() 
 
         if boost_var.get():
-            cpu_boost = get_max_cpu_speed()
-            command = f"echo {password} | sudo -S cpupower frequency-set --max {cpu_boost}"
+            command = f"echo {password} | sudo -S cpupower frequency-set --max {int(float(get_max_cpu_speed())*1000000)}"
         else:
             cpu_base = get_base_cpu_speed()
-            command = f"echo {password} | sudo -S cpupower frequency-set --max {cpu_base}"
+            command = f"echo {password} | sudo -S cpupower frequency-set --max {int(float(get_base_cpu_speed())*1000000)}"
 
         try:
             subprocess.run(["bash", "-c", command], check=True)
@@ -60,15 +59,15 @@ def toggle_cpu_boost():
             open_password_window()
 
     def open_password_window():
-        global password_window  # Declare password_window as global
+        global password_window 
         password_window = tk.Toplevel(root)
         password_window.title("Enter Password")
 
         password_label = tk.Label(password_window, text="Enter your password:")
         password_label.pack()
 
-        global password_var  # Declare password_var as global
-        password_var = tk.StringVar()  # Create a StringVar to hold the password
+        global password_var  
+        password_var = tk.StringVar()
         password_entry = tk.Entry(password_window, show="*", textvariable=password_var)
         password_entry.pack()
 
