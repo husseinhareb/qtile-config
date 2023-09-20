@@ -261,6 +261,13 @@ cpu_speed.pack()
 cpu_speed.place(x=205,y=28)
 boost_var = tk.BooleanVar()
 
+try:
+    with open('checkbox_state.txt', 'r') as file:
+        state = file.read()
+        boost_var.set(state.lower() == "true")
+except FileNotFoundError:
+    boost_var.set(False)
+
 cpu_boost_button = tb.Checkbutton(  cpu_frame,
                                     bootstyle= "primary",
                                     variable=boost_var,
