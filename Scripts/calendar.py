@@ -1,40 +1,19 @@
-import subprocess
+import calendar
 import datetime
 
-def colorize_word(text, target_word, background_color):
-    words = text.split()
-    
-    result = ""
-    
-    background_code = {
-        'yellow': '\033[43m',
-    }
-    
-    if background_color not in background_code:
-        raise ValueError("Invalid background color")
-    
-    for word in words:
-        if word == target_word:
+# Get the current date
+current_date = datetime.date.today()
 
-            colored_word = (
-                background_code[background_color] +  
-                word +                            
-                background_code['reset']             
-            )
-            result += colored_word + " "  
-        else:
-            result += word + " " 
-    
-    return result.strip()  
-today = datetime.date.today()
-day_of_month = today.day
+# Extract the current month and year
+year = current_date.year
+month = current_date.month
+day = current_date.day
 
-command = "cal"
-try:
-    output = subprocess.check_output(command, shell=True, text=True)
-    today = str(day_of_month)
-    background_color = "yellow"
-    colored_sentence = colorize_word(output,today,background_color)
-    print(colored_sentence)
-except subprocess.CalledProcessError as e:
-    print(f"Error: {e}")
+# Create a TextCalendar object
+cal = calendar.TextCalendar(calendar.SUNDAY)  # Start weeks on Sunday
+
+# Display the calendar for the current month and year with today's date highlighted
+calendar_text = cal.formatmonth(year, month)
+highlighted_calendar = calendar_text.replace(f"{day:2}", f"\033[1;37;41m{day:2}\033[m", 1)
+
+print(highlighted_calendar)
