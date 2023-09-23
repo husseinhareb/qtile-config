@@ -13,8 +13,8 @@ calendar_text = cal.formatmonth(year, month)
 
 root = tk.Tk(className="Calendar_widget")
 root.configure(bg="#292938")
-root.geometry('250x250+1725+38')
-text_widget = tb.Text(root, wrap=tk.WORD)
+root.geometry('250x200+30+38')
+text_widget = tb.Text(root, wrap=tk.WORD,)
 text_widget.pack()
 
 text_widget.configure(font=("Courier", 10, "bold"), background="#292938", foreground="#ababeb")
@@ -37,14 +37,5 @@ while True:
     text_start = end_idx
 
 text_widget.configure(state="disabled")
-
-quotes_dict = {
-    1: "The only way to do great work is to love what you do. - Steve Jobs",
-    2: "In three words I can sum up everything I've learned about life: it goes on. - Robert Frost",
-    3: "Don't cry because it's over, smile because it happened. - Dr. Seuss",
-    4: "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment. - Ralph Waldo Emerson",
-    5: "Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill"
-}
-
 
 root.mainloop()
