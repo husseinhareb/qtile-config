@@ -281,9 +281,9 @@ cpu_boost_button = tb.Checkbutton(  cpu_frame,
                                     bootstyle= "primary",
                                     variable=boost_var,
                                     style='Roundtoggle.Toolbutton',
-                                    onvalue=1,
+                                    onvalue=True,
                                     text="󰓅 Cpu boost",
-                                    offvalue=0,
+                                    offvalue=False,
                                     command=toggle_cpu_boost)
 cpu_boost_button.pack(padx=200,pady=80)
 cpu_boost_button.place(x=360,y=155)
