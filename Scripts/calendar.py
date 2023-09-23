@@ -1,22 +1,24 @@
 import tkinter as tk
 import calendar
 import datetime
+import ttkbootstrap as tb
+
 
 current_date = datetime.date.today()
 
 year = current_date.year
 month = current_date.month
-day = current_date.day  # Extract the day of the month and convert to a string
+day = current_date.day  
 cal = calendar.TextCalendar(calendar.SUNDAY) 
 calendar_text =  cal.formatmonth(year, month)
     
-root = tk.Tk()
-root.title("Linux-like Calendar")
-
-text_widget = tk.Text(root, wrap=tk.WORD)
+root = tk.Tk(className="Calendar_widget")
+root.configure(bg="#292938")
+root.geometry('250x250+1725+38')
+text_widget = tb.Text(root, wrap=tk.WORD)
 text_widget.pack()
 
-text_widget.configure(font=("Courier", 12))
+text_widget.configure(font=("Courier", 10,"bold"),background="#292938",foreground="#ababeb")
 
 text_widget.insert("1.0", calendar_text)
 
@@ -34,7 +36,7 @@ while True:
 
         # Tag the date with a red background
     text_widget.tag_add("highlight", start_idx, end_idx)
-    text_widget.tag_configure("highlight", background="red", foreground="white")
+    text_widget.tag_configure("highlight", background="#ababeb", foreground="#292938")
 
         # Update the start position for the next search
     text_start = end_idx
