@@ -26,6 +26,9 @@ icons_list = {
     "50n": "" # Mist night.
 }
 
-url = ('http://api.openweathermap.org/data/2.5/weather?q={}&units={}&appid={}').format(city_name, unit, api_key)
-result = requests.get(url)
-print(url)
+try:
+    url = ('http://api.openweathermap.org/data/2.5/weather?q={}&units={}&appid={}').format(city_name, unit, api_key)
+    result = requests.get(url)
+    print(result.status_code)
+except Exception as e:
+    print("error")
