@@ -1,7 +1,7 @@
 import requests
 
-city_name = "Beirut"
-api_key = "2a33d8b44aa8d93d07feac453b4a79aa"
+city_name = "city"
+api_key = "api_key"
 unit = "metric" 
 temperature_unit = "C"
 
@@ -25,3 +25,5 @@ icons_list = {
     "50d": "", # Mist day.
     "50n": "" # Mist night.
 }
+
+url = ('http://api.openweathermap.org/data/2.5/weather?q={}&units={}&appid={}').format(city_name, unit, api_key)
