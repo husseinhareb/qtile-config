@@ -27,3 +27,5 @@ icons_list = {
 }
 
 url = ('http://api.openweathermap.org/data/2.5/weather?q={}&units={}&appid={}').format(city_name, unit, api_key)
+result = requests.get(url)
+print(url)
