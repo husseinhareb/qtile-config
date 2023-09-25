@@ -32,7 +32,6 @@ try:
     if(result.status_code == requests.codes['ok']):
         weather = result.json()
         id = int(weather['weather'][0]['id'])
-        group = weather['weather'][0]['main'].capitalize()
         icon = weather['weather'][0]['icon'].capitalize()
         temp = int(float(weather['main']['temp']))
         print(icons_list[icon] + '' ' {}°{}'.format(temp, temperature_unit))
