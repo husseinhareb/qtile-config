@@ -29,6 +29,7 @@ icons_list = {
 try:
     url = ('http://api.openweathermap.org/data/2.5/weather?q={}&units={}&appid={}').format(city_name, unit, api_key)
     result = requests.get(url)
-    print(result.status_code)
+    if(result.status_code == requests.codes['ok']):
+        weather = result.json()
 except Exception as e:
-    print("error")
+    print("")
