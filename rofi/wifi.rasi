@@ -2,3 +2,17 @@ configuration {
   font: "JetBrainsMono Nerd Font Medium 10";
   location: 3;
 }
+
+* {
+  bg: #1E1E2E99;
+  bg-alt: #585b7066;
+  bg-selected: #31324466;
+
+  fg: #619eff;
+  fg-alt: #7f849c;
+  
+  border: 0;
+  margin: 3;
+  padding: 2;
+  spacing: 2;
+}
