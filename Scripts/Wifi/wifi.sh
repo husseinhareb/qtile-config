@@ -13,10 +13,10 @@ while IFS=':' read -r ssid signal; do
     else
         signal_symbol="󰤨" 
     fi
-    formatted_list+=" $signal_symbol:$ssid\n"
+    formatted_list+=" $signal_symbol $ssid\n"
 done <<< "$wifi_list"
 
-chosen=$(echo -e "$formatted_list" | rofi -theme ~/.config/rofi/wifi.rasi -dmenu -p "Wi-Fi networks:" | awk -F ':' '{print $2}' | xargs)
+chosen=$(echo -e "$formatted_list" | rofi -theme ~/.config/rofi/wifi.rasi -dmenu -p "Wi-Fi networks:" | awk -F ' ' '{print $2}' | xargs)
 
 if [ -n "$chosen" ]; then
     nmcli device wifi connect "$chosen"
