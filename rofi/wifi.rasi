@@ -1,4 +1,4 @@
 configuration {
-  font: "JetBrainsMono Nerd Font Medium 12";
+  font: "JetBrainsMono Nerd Font Medium 10";
   location: 3;
 }
