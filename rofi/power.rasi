@@ -12,9 +12,9 @@ configuration {
   fg-alt: #7f849c;
   
   border: 0;
-  margin:0;
-  padding: 0;
-  spacing: 0;
+  margin:5;
+  padding: 5;
+  spacing: 5;
 }
 
 window {
