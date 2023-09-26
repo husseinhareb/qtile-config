@@ -3,16 +3,51 @@ configuration {
   location: 3;
 }
 
+
 * {
   bg: #1E1E2E99;
   bg-alt: #585b7066;
   bg-selected: #31324466;
 
   fg: #619eff;
-  fg-alt: #7f849c;
+  fg-alt: #c0d7fc;
   
   border: 0;
-  margin: 3;
-  padding: 2;
-  spacing: 2;
+  margin: 0;
+  padding: 4;
+  spacing: 0;
+  padding-color:#000000;
 }
+
+window {
+  width: 11%;
+  background-color: @bg;
+}
+
+element {
+  background-color: transparent;
+  text-color: @fg-alt;
+}
+
+element selected {
+  text-color: @fg;
+  background-color: @bg-selected;
+}
+
+element-text {
+  background-color: transparent;
+  text-color: inherit;
+}
+
+
+listview {
+  background-color: @bg;
+  columns: 1;
+  lines: 4;
+}
+
+mainbox {
+  children: [listview];
+  background-color: @bg;
+}
+
