@@ -11,4 +11,4 @@
 
 dunst&
 
-picom --experimental-backends b 
+
