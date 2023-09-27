@@ -136,9 +136,6 @@ extension_defaults = widget_defaults.copy()
 screens = [
     Screen(
         top=bar.Gap(38),
-        left=bar.Gap(3),
-        right=bar.Gap(3),
-
         wallpaper=wallpaper_path,
         wallpaper_mode="fill",  
         #bottom=bar.Bar(
