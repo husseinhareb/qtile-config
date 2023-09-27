@@ -9,3 +9,6 @@
 (polybar sound)&
 (polybar weather)&
 
+dunst&
+
+picom --experimental-backends b 
