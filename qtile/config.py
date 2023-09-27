@@ -29,11 +29,16 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 import os
-
-
+from libqtile import hook
+import subprocess
 mod = "mod4"
 terminal = guess_terminal()
-wallpaper_path = os.path.expanduser("~/Pictures/Wallpapers/eyes.png")
+wallpaper_path = os.path.expanduser("~/Pictures/Wallpapers/boat.png")
+
+@hook.subscribe.startup_once
+def autostart():
+    home = os.path.expanduser('~/.config/qtile/autostart.sh')
+    subprocess.run([home])
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -76,6 +81,7 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     Key([mod], "q", lazy.spawn("rofi -show drun -show-icons")),
+    Key([mod], "f", lazy.window.toggle_fullscreen())
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -105,13 +111,13 @@ for i in groups:
     )
 
 layouts = [
-    layout.Columns(border_focus_stack=["#06314d", "#06314d"], border_width=2),
+    layout.Columns(border_focus_stack=["#06314d", "#06314d"], border_width=2,margin=4),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
-    # layout.Stack(num_stacks=2),
+    #layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall(margin=10)
+    layout.MonadTall()
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
@@ -130,6 +136,9 @@ extension_defaults = widget_defaults.copy()
 screens = [
     Screen(
         top=bar.Gap(38),
+        left=bar.Gap(3),
+        right=bar.Gap(3),
+
         wallpaper=wallpaper_path,
         wallpaper_mode="fill",  
         #bottom=bar.Bar(
@@ -184,7 +193,9 @@ floating_layout = layout.Floating(
         Match(wm_class="Brightness_widget"),
         Match(wm_class="Volume_widget"),
         Match(wm_class="Monitoring_widget"),
-        Match(wm_class="Mic_widget")
+        Match(wm_class="Mic_widget"),
+        Match(wm_class="Calendar_widget"),
+        Match(title="Password_Entry")
     ]
 )
 auto_fullscreen = True
