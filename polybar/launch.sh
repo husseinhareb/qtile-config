@@ -7,3 +7,4 @@
 (polybar wifi)&
 (polybar settings)&
 (polybar sound)&
+
