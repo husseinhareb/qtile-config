@@ -31,6 +31,7 @@ from libqtile.utils import guess_terminal
 import os
 from libqtile import hook
 import subprocess
+import time
 mod = "mod4"
 terminal = guess_terminal()
 wallpaper_path = os.path.expanduser("~/Pictures/Wallpapers/boat.png")
@@ -39,6 +40,9 @@ wallpaper_path = os.path.expanduser("~/Pictures/Wallpapers/boat.png")
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.run([home])
+    time.sleep(2)
+    subprocess.call(["picom", "--experimental-backends", "-b"])
+
 
 keys = [
     # A list of available commands that can be bound to keys can be found
