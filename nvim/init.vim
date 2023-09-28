@@ -29,6 +29,7 @@ Plug 'skywind3000/vim-keysound'
 Plug 'vim-airline/vim-airline'
 Plug 'folke/tokyonight.nvim'
 Plug 'preservim/nerdtree'
+Plug 'lilydjwg/colorizer'
 
 call plug#end()
 
@@ -334,4 +335,6 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 
 " Toggle NERDTree with <F3> (you can change the key mapping)
 nnoremap <F3> :NERDTreeToggle<CR>
+
+" Enable vim-colorizer
 
