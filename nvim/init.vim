@@ -28,6 +28,8 @@ Plug 'nerdypepper/vim-colors-plain'
 Plug 'skywind3000/vim-keysound'
 Plug 'vim-airline/vim-airline'
 Plug 'folke/tokyonight.nvim'
+Plug 'preservim/nerdtree'
+
 call plug#end()
 
 
@@ -319,4 +321,17 @@ let g:keysound_theme = 'typewriter'
 
 
 " emmet
-let g:user_emmet_mode='a'    "enable all function in all mode.
+let g:user_emmet_mode='a'
+
+"enable all function in all mode.
+
+" NERDTree configuration
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | endif
+
+" Toggle NERDTree with <F3> (you can change the key mapping)
+nnoremap <F3> :NERDTreeToggle<CR>
+
