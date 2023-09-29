@@ -114,20 +114,23 @@ for i in groups:
         ]
     )
 
+
+
 layouts = [
-    layout.Columns(border_focus_stack=["#06314d", "#06314d"], border_width=2,margin=4),
+    layout.Columns(border_focus=["#6790EB", "#6790EB"],border_normal=["#4c566a", "#4c566a"],border_width=2,margin=4),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
     #layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall()
+    layout.MonadTall(),
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
     # layout.VerticalTile(),
     # layout.Zoomy(),
+   
 ]
 
 widget_defaults = dict(
@@ -197,7 +200,10 @@ floating_layout = layout.Floating(
         Match(wm_class="Mic_widget"),
         Match(wm_class="Calendar_widget"),
         Match(title="Password_Entry")
-    ]
+    ],
+    border_focus=["#6790EB", "#6790EB"],
+    border_normal=["#4c566a", "#4c566a"],
+    border_width=2
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
