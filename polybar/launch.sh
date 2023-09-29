@@ -4,7 +4,7 @@
 (polybar workspaces)&
 (polybar monitor)&
 (polybar weather)&
-(polybar wifi)&
-(polybar settings)&
 (polybar sound)&
+(polybar settings)&
+(polybar wifi)&
 
