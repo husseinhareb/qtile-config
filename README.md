@@ -26,10 +26,16 @@ Finally, there is a hardware monitor widget that retrieves essential information
 
 You are welcome to copy any of my dotfiles or scripts you come across here.However, I advise against attempting to duplicate the entire setup, as it lacks organization and is tailored to my specific requirements.
 
-NOTE:The hardware monitor and the brightness widget only works on nvidia driver.
+These widgets are done on a **1080x1920** resolution screen with nvidia drivers.
+
+NOTE:The spotify polybar need `spotifyd` for it to work. 
 
 NOTE:If the icons didn't load try installing `Symbols Nerd Fonts`.
+
+NOTE:The hardware monitor and the brightness widget only works on nvidia drivers
 
 NOTE:Don't forget to make all of the bash files executable by using `chmod +x /path/to/file`.
 
 NOTE:You should add your city and an API key in the python script for the weather, you can get one for free from [here](https://openweathermap.org/) .
+
+NOTE:The packages needed for the hardware monitor to work are: `python3 python-psutil python-tkinter python-ttkbootstrap nvidia nvidia-smi`
