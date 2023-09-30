@@ -24,3 +24,12 @@ I developed a variety of Python widgets using tkinter and ttkboostrap, each one 
 ![Screenshot from 2023-09-29 15-25-57](https://github.com/husseinhareb/qtile-config/assets/88323940/246f9fae-1017-4888-9693-bf40dc0b7a1c)
 Finally, there is a hardware monitor widget that retrieves essential information from the computer's hardware, including details about the CPU, GPU, and RAM. Additionally, it includes a functionality to enable or disable CPU boosting, which can be advantageous on laptops for longer battery time.
 
+You are welcome to copy any of my dotfiles or scripts you come across here.However, I advise against attempting to duplicate the entire setup, as it lacks organization and is tailored to my specific requirements.
+
+NOTE:The hardware monitor and the brightness widget only works on nvidia driver.
+
+NOTE:If the icons didn't load try installing `Symbols Nerd Fonts`.
+
+NOTE:Don't forget to make all of the bash files executable by using `chmod +x /path/to/file`.
+
+NOTE:You should add your city and an API key in the python script for the weather, you can get one for free from [here](https://openweathermap.org/) .
