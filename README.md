@@ -39,3 +39,5 @@ NOTE:Don't forget to make all of the bash files executable by using `chmod +x /p
 NOTE:You should add your city and an API key in the python script for the weather, you can get one for free from [here](https://openweathermap.org/) .
 
 NOTE:The packages needed for the hardware monitor to work are: `python3 python-psutil python-tkinter python-ttkbootstrap nvidia nvidia-smi`
+
+test
