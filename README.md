@@ -40,4 +40,3 @@ NOTE:You should add your city and an API key in the python script for the weathe
 
 NOTE:The packages needed for the hardware monitor to work are: `python3 python-psutil python-tkinter python-ttkbootstrap nvidia nvidia-smi`
 
-test
