@@ -1,2 +1,2 @@
 # Qtile-config
-Qtle config and more widgets on my Linux
+Qtile config and more widgets on my Linux
